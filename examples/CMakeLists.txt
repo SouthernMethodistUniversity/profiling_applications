@@ -7,7 +7,8 @@ set_target_properties(mmm PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
 )
-set(CMAKE_CXX_FLAGS "-O0 -p")
+# Hint
+# set(CMAKE_CXX_FLAGS "")
 include_directories(${ARMADILLO_INCLUDE_DIRS})
 target_link_libraries(mmm ${ARMADILLO_LIBRARIES})
 
