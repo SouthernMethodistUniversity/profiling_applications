@@ -1,3 +1,4 @@
+import time, random
 import numpy as np
 
 def initialize_matrix(m, n, fill=0):

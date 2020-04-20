@@ -38,7 +38,7 @@
     2. Sign in using your SMU ID and SMU password.
     3. Select "ManeFrame II Shell Access" from the "Clusters" drop-down menu.
 
-## Profiling and Performance Analysis
+## Profiling and Performance Analysis with GCC
 
 There are two primary mechanisms for profiling code: determining which
 routines take the most time, and determining which specific lines of
@@ -282,4 +282,15 @@ improvement (at least 40% faster than the original).
 Write down the total runtime required for your hand-optimized program.
 Copy your updated code to the file `file_new.cpp` (again, use the
 appropriate extension for your coding language).
+
+## Profiling Python Scripts
+
+```
+module load python
+python3 -m cProfile -o profile_data.txt mmm.py
+python3 view_profile.py | grep gemm
+```
+
+## Profiling R Scripts
+
 
