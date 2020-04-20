@@ -1,63 +1,54 @@
-Session 4: Advanced Programming
-===============================
+# Profiling Applications on M2
 
-Getting started
----------------
+## Center for Scientific Computation (CSC)
 
-In this session, we will use examples in either C, C++ or Fortran90.
-Choose your preferred language of the three and download the files to be
-used in this session by either clicking one of the following three
-links: `C version <code/session4_c.tgz>`{.interpreted-text
-role="download"}, `C++
-version <code/session4_cxx.tgz>`{.interpreted-text role="download"},
-`F90 version
-<code/session4_f90.tgz>`{.interpreted-text role="download"}, or by
-copying the relevant files on ManeFrame with one of the following 3
-commands:
+* Maintains our primary shared resource for research computing, ManeFrame II (M2),
+  in collaboration with OIT
+* Provides research computing tools, support, and training to all faculty, staff,
+  and students using research computing resources
+  [www.smu.edu/csc](https://www.smu.edu/csc) has documentation and news
+* [help@smu.edu](mailto:help@smu.edu) or
+  [rkalescky@smu.edu](mailto:rkalescky@smu.edu) for help
 
-``` {.bash}
-$ cp /grid/software/examples/workshops/hpc/session4_c.tgz .
-$ cp /grid/software/examples/workshops/hpc/session4_cxx.tgz .
-$ cp /grid/software/examples/workshops/hpc/session4_f90.tgz .
-```
+## CSC Workshop Series
 
-Unpack your tarball and enter the resulting directory.
+|Date         |Workshop                                                     |
+|-------------|-------------------------------------------------------------|
+|January 21   |M2 Introduction                                              |
+|January 28   |Introduction to LAPACK and BLAS                              |
+|February 4   |Text Mining with Python on M2 (Lead by Dr. Eric Godat)       |
+|February 11  |Using the New HPC Portal                                     |
+|February 18  |Using GitHub                                                 |
+|February 25  |Writing Portable Accelerator Code with KOKKOS, RAJA, and OCCA|
+|March 3      |M2 Introduction                                              |
+|March 10     |Introduction to Parallelization Using MPI                    |
+|March 17     |No Workshop Spring Break                                     |
+|March 24     |Writing High Performance Python Code                         |
+|March 31     |Creating Portable Environments with Docker and Singularity   |
+|April 7      |M2 Introduction                                              |
+|April 14     |Introduction to Parallelization Using OpenMP and OpenACC     |
+|April 21     |Profiling Applications on M2                                 |
+|April 28     |Improving Code Vectorization                                 |
 
-::: {.index}
-profiling
-:::
+## Accessing ManeFrame II (M2) for this Workshop
 
-Profiling and performance analysis
-----------------------------------
+* Via Terminal or Putty as usual (see [here](http://faculty.smu.edu/csc/documentation/access.html) for details)
+* Via the HPC Portal (Note that this doesn't support X11 forwarding)
+    1. Go to [hpc.smu.edu](https://hpc.smu.edu/).
+    2. Sign in using your SMU ID and SMU password.
+    3. Select "ManeFrame II Shell Access" from the "Clusters" drop-down menu.
+
+## Profiling and Performance Analysis
 
 There are two primary mechanisms for profiling code: determining which
 routines take the most time, and determining which specific lines of
 code would be best to optimize. Thankfully, the [GNU compiler
 collection](http://gcc.gnu.org/) includes utilities for both of these
 tasks, as will be illustrated below. Utilities with similar
-functionality are included with some other compilers, and I recommend
-that you look up the corresponding information for your compiler of
-choice.
-
-::: {.note}
-::: {.title}
-Note
-:::
-
-In fact, OS X provides a free suite of programs,
-[Xcode](https://developer.apple.com/xcode/), that has incredibly useful
-profiling and performance monitoring tools. For users with OS X Lion or
-newer, this tool is called
-[Instruments](https://developer.apple.com/library/mac/documentation/developertools/conceptual/instrumentsuserguide/Introduction/Introduction.html);
-for users with older versions of OS X it is called
-[Shark](https://developer.apple.com/legacy/library/documentation/DeveloperTools/Conceptual/SharkUserGuide/SharkUserGuide.pdf).
-:::
+functionality are included with some other compilers and we will look at some 
+of these in turn.
 
 ### Generating a profile
-
-::: {.index}
-pair: profiling; -p
-:::
 
 In the GNU compilers (and many others), you can enable profiling
 information through adding in the `-p` compiler flag. Add this compiler
@@ -391,223 +382,3 @@ Typically, compilers also implement a basic `-O` flag that defaults to
 `-O2`. However, there are additional optimizations that can be performed
 by the compiler, as will be discussed in the compiler\'s man page or
 online documentation.
-:::
-
-::: {.index}
-debugging
-:::
-
-Debugging and debuggers
------------------------
-
-### Enabling Debugging Information
-
-::: {.index}
-pair: debugging; -g
-:::
-
-In most compilers (including GNU and PGI), you can enable debugging
-information through adding the `-g` compiler flag. Add this flag to the
-compilation commands in the `Makefile` for the target `driver2.exe`, and
-then compile the executable,
-
-``` {.bash}
-$ make driver2.exe
-```
-
-::: {.index}
-pair: debugging; segmentation fault pair: debugging; bus error
-:::
-
-Run the new executable. It should die with an error message about a
-segmentation violation (segmentation fault) or bus error, depending on
-the compiler/OS, e.g.
-
-``` {.bash}
-$ ./driver2.exe
-Segmentation fault
-```
-
-There are many ways to track down this kind of error (e.g. adding print
-statements everywhere, staring intently hoping for an epiphany, randomly
-changing things to see what happens). In this session we will use the
-most efficient debugging approach, that of using a tool to track down
-the bug for us.
-
-::: {.index}
-pair: debugging; gdb
-:::
-
-The tool we will use is the GNU debugger, which can be accessed through
-running the faulty executable program from within the debugging program
-itself. Load the executable into `gdb` with the command
-
-``` {.bash}
-$ gdb driver2.exe
-```
-
-At the `gdb` prompt, type `run` to start the executable. It will
-automatically stop at the line where the segmentation fault occurs.
-
-In another terminal window, you can type `man gdb` to learn more about
-how to use the debugger (or you can [click here to view the gdb man page
-on the web](http://linux.die.net/man/1/gdb).
-
--   Perhaps the most valuable gdb command is `print` that may be used to
-    see the internal value of a specified variable, e.g.
-
-    ``` {.bash}
-    (gdb) print i
-    ```
-
-    will print out the current value of the iteration variable `i`).
-
--   The `help` command inside of `gdb` may be used to find out more
-    information on how to use the program itself.
-
--   The `quit` command inside of `gdb` will exit the debugger and return
-    you to the command line. Alternatively, you may just type `^d`
-    (\[control\]-\[d\]) to exit.
-
-### Fixing the Bug
-
-C users:
-
-:   Open both the files `driver2.c` and `tridiag_matvec.c`, and see if
-    you can find/fix the problem by using `gdb` and `print` statements
-    as appropriate.
-
-C++ users:
-
-:   Open both the files `driver2.cpp` and `tridiag_matvec.cpp`, and see
-    if you can find/fix the problem by using `gdb` and `print`
-    statements as appropriate.
-
-F90 users:
-
-:   Open both the files `driver2.f90` and `tridiag_matvec.f90`, and see
-    if you can find/fix the problem by using `gdb` and `print`
-    statements as appropriate.
-
-::: {.index}
-pair: debugging; segmentation fault pair: debugging; bus error
-:::
-
-A word of warning, the location of the segmentation fault or bus error
-is not always where the problem is located. Segmentation faults
-generally occur due to an attempt within the program to read to or write
-from an illegal memory location, i.e. a memory location that is not a
-part of a currently-available variable. Examples of bugs that can cause
-a seg-fault are iterating outside of the bounds of an array, or a
-mismatch between the arguments that a program uses to call a function
-and the arguments that the function expects to receive.
-
-::: {.note}
-::: {.title}
-Note
-:::
-
-Tips for tracking/fixing segmentation faults
-
-Using a debugger:
-
-1.  determine exactly the line of code causing the fault,
-
-2.  if the fault is inside a loop, determine exactly which iteration of
-    the loop is causing the fault,
-
-3.  use print statements in the debugger to see which variable is
-    uninitialized, e.g. to see if the array `x` has entry `i` you could
-    use
-
-    ``` {.bash}
-    (gdb) print x[i]
-    ```
-
-Once you identify the precise location of the segmentation fault, go
-back to see where the data is allocated. Was it allocated with a
-different size, shape or type? Was it not allocated at all?
-
-If the data is allocated in a different manner than it is being used,
-determine which location needs fixing and try your best.
-:::
-
-Upon finding and fixing the bug causing the segmentation fault, the
-correctly-executing program should write the following line:
-
-``` {.text}
-2-norm of product = 1.414213562373E+00
-```
-
-(or something within roundoff error of this result), and it should write
-the file `r.txt` that contains the result of the matrix-vector product.
-This output vector should contain all 0\'s except for the first and last
-entries, which should be 1.
-
-::: {.index}
-debugging; advanced debuggers
-:::
-
-### Advanced debuggers
-
-There are many freely-available Linux debugging utilites in addition to
-[gdb](https://www.gnu.org/software/gdb/). Most of these are graphical
-(i.e. point-and-click), and in fact use `gdb` under the hood. Some of
-the more popular of these debuggers include:
-[ddd](https://www.gnu.org/software/ddd/),
-[nemiver](http://projects.gnome.org/nemiver/),
-[eclipse](http://www.eclipse.org/eclipse/debug/),
-[zerobugs](https://zerobugs.codeplex.com/),
-[edb](http://www.woodmann.com/collaborative/tools/index.php/EDB_Linux_Debugger).
-However, of this set the ManeFrame cluster currently only has `gdb`
-installed (ask your system administrators for others you want/need).
-
-Additionally, there are some highly advanced non-free Linux debugging
-utilities available (all typically graphical), including
-[TotalView](http://www.roguewave.com/products/totalview.aspx),
-[DDT](http://www.allinea.com/products/ddt/),
-[idb](http://software.intel.com/en-us/articles/idb-linux) (only works
-with the Intel compilers), and PGI\'s
-[pgdbg](http://www.pgroup.com/products/pgdbg.htm) (graphical) and
-[pgdebug]{.title-ref} (text version). Of these, the ManeFrame cluster
-has both `pgdbg` and `pgdebug`.
-
-The usage of most of the above debuggers is similar to `gdb`, except
-that in graphical debuggers it can be easier to view the
-data/instruction stack. The primary benefit of the non-free debuggers is
-their support for debugging parallel jobs that use OpenMP, MPI, or
-hybrid MPI/OpenMP computing approaches (see session 9). In fact, some of
-these professional tools can even be used to debug code running on GPU
-accelerators.
-
-If you\'re interested in learning more about these, I recommend that you
-re-download the tarball for this session, load the `pgi` module, update
-the Makefile to use the `-g` option along with the relevant PGI compiler
-(`pgcc`, `pgc++` or `pgfortran`), and launch the job in the `pgdbg`
-debugger like you did with `gdb`:
-
-``` {.bash}
-$ pgdbg ./driver2.exe
-```
-
-Press the \"play\" button to start the executable running, and use the
-mouse to interact with the debugger as needed.
-
-::: {.note}
-::: {.title}
-Note
-:::
-
-SMU pays for a five-seat PGI license, meaning that only five distinct
-compilation/debugging processes with the PGI tools may be run
-simultaneously. Typically, five is much more than sufficient for a
-campus of our size, since users spend most of their time writing code,
-preparing input parameters and scripts for running simulations, or
-post-processing simulation data; the time spent actually compiling and
-using a debugger is minimal. However, if everyone in the workshop tries
-this simultaneously, we would obviously exceed the five \"seats,\" which
-is why this is left as a personal exercise.
-:::
-
-```{=html}
-```
