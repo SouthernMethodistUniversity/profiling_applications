@@ -285,12 +285,42 @@ appropriate extension for your coding language).
 
 ## Profiling Python Scripts
 
+Like GCC and Python, R has the ability to profile at the line level.
+
 ```
+module purge
 module load python
-python3 -m cProfile -o profile_data.txt mmm.py
+srun -p development,htc,standard-mem-s -c 1 --mem=6G -t 5 python3 mmm.py
+```
+
+This demonstrates the performance difference between an optimized matrix-matrix
+implementation and a simple implementation.
+
+```
+srun -p development,htc,standard-mem-s -c 1 --mem=6G -t 5 python3 -m cProfile -o profile_data.txt mmm.py
 python3 view_profile.py | grep gemm
 ```
 
+The `view_profile.py` script extracts line-level profile information from the
+`profile_data.txt` file.
+
 ## Profiling R Scripts
 
+Like GCC and Python, R has the ability to profile at the function and line levels.
+
+```
+module purge
+$ module load r/3.6.2
+$ srun -p development,htc,standard-mem-s -c 1 --mem=6G -t 5 Rscript mmm.R 1
+```
+
+This demonstrates the performance difference between an optimized matrix-matrix
+implementation and a simple implementation.
+
+```
+$ srun -p development,htc,standard-mem-s -c 1 --mem=6G -t 5 Rscript profile.R
+```
+
+The `profile.R` script runs the profiler twice, once for function-level
+information and again for line-level information.
 
