@@ -1,6 +1,6 @@
 # Profiling Applications on M2
 
-## Center for Scientific Computation (CSC)
+## Center for Research Computing (CRC)
 
 * Maintains our primary shared resource for research computing, ManeFrame II (M2),
   in collaboration with OIT
