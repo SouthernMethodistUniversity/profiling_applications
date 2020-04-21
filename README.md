@@ -288,17 +288,17 @@ appropriate extension for your coding language).
 Like GCC and Python, R has the ability to profile at the line level.
 
 ```
-module purge
-module load python
-srun -p development,htc,standard-mem-s -c 1 --mem=6G -t 5 python3 mmm.py
+$ module purge
+$ module load python
+$ srun -p development,htc,standard-mem-s -c 1 --mem=6G -t 5 python3 mmm.py
 ```
 
 This demonstrates the performance difference between an optimized matrix-matrix
 implementation and a simple implementation.
 
 ```
-srun -p development,htc,standard-mem-s -c 1 --mem=6G -t 5 python3 -m cProfile -o profile_data.txt mmm.py
-python3 view_profile.py | grep gemm
+$ srun -p development,htc,standard-mem-s -c 1 --mem=6G -t 5 python3 -m cProfile -o profile_data.txt mmm.py
+$ python3 view_profile.py | grep gemm
 ```
 
 The `view_profile.py` script extracts line-level profile information from the
@@ -309,7 +309,7 @@ The `view_profile.py` script extracts line-level profile information from the
 Like GCC and Python, R has the ability to profile at the function and line levels.
 
 ```
-module purge
+$ module purge
 $ module load r/3.6.2
 $ srun -p development,htc,standard-mem-s -c 1 --mem=6G -t 5 Rscript mmm.R 1
 ```
